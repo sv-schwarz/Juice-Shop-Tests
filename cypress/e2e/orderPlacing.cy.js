@@ -1,9 +1,11 @@
 import user from '../fixtures/user.json'
-import { login, selectAddressOrAddNewOne, selectCardOrAddNew } from '../support/helper';
+import { login, selectAddressOrAddNewOne, selectCardOrAddNew, searchItem } from '../support/helper';
 
 it('Make an order', () => {
 
   login(user);
+
+  searchItem('juice');
 
   cy.log('Add a product to the cart')
   cy.get('mat-card.mat-card')

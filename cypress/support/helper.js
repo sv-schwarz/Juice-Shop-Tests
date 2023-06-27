@@ -81,22 +81,40 @@ export function selectCardOrAddNew() {
     cy.log('Select a card or add a new one');
     cy.wait(2000);
     cy.get('app-payment').within(() => {
-      cy.get('mat-card').then(($matCard) => {
-        const table = $matCard.find('.mat-table.cdk-table');
-        if (table.length > 0) {
-          cy.get('.mat-row').first().within(() => {
-            cy.get('.mat-cell').first().within(() => {
-              cy.get('.mat-radio-button').first().click();
-            });
-          });
-        } else {
-          addNewCard();
-          cy.get('mat-radio-button').first().click();
-        }
-      });
+        cy.get('mat-card').then(($matCard) => {
+            const table = $matCard.find('.mat-table.cdk-table');
+            if (table.length > 0) {
+                cy.get('.mat-row').first().within(() => {
+                    cy.get('.mat-cell').first().within(() => {
+                        cy.get('.mat-radio-button').first().click();
+                    });
+                });
+            } else {
+                addNewCard();
+                cy.get('mat-radio-button').first().click();
+            }
+        });
     });
     cy.get('button[aria-label="Proceed to review"]').click();
-  }
-  
-  
-  
+}
+
+export function searchItem(keyword) {
+    cy.log('Search for a product');
+    cy.get('mat-search-bar').click().within(() => {
+        cy.get('input').type(keyword);
+    });
+}
+
+export function closePopUps(){
+    cy.log('Check and close Welcome banner');
+    cy.get('app-welcome-banner').then(($welcomeBanner) => {
+        if ($welcomeBanner.is(':visible')) {
+            cy.get('button.close-dialog').click();
+        } else {
+            cy.contains('#navbarAccount').click();
+        }
+    });
+
+    cy.log('Accept cookies')
+    cy.get('div.cc-compliance a.cc-btn.cc-dismiss').click();
+}

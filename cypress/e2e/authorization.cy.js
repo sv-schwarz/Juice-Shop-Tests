@@ -1,6 +1,7 @@
 import homePage from "../support/pages/HomePage.js";
 import loginPage from "../support/pages/LoginPage.js";
 import user from '../fixtures/user.json'
+import { closePopUps } from '../support/helper.js'
 
 it('Authorization', () => {
   homePage.visit();

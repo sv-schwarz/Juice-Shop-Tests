@@ -1,5 +1,3 @@
-// const cypress = require("cypress");
-
 class LoginPage {
 
     getEmailField() {
@@ -24,21 +22,27 @@ class LoginPage {
 
     navigateToRegistrationPage() {
         cy.log('Open registration form');
-        return cy.get('a.primary-link[href="#/register"]').click();
+        cy.get('a.primary-link[href="#/register"]').click();
     }
 
     fillRegistrationForm(email, password, repeatPassword, answer) {
-        cy.get('#emailControl').type(email);
-        cy.get('#passwordControl').type(password);
-        cy.get('#repeatPasswordControl').type(repeatPassword);
-        cy.get('.mat-form-field-flex mat-select[name="securityQuestion"]').click();
-        cy.get('#mat-select-2-panel')
-            .scrollTo('bottom')
-            .then(() => {
-                cy.get('#mat-option-13').click();
-            });
-        cy.get('#securityAnswerControl').type(answer);
-        cy.get('#registerButton').click();
+        cy.get('#emailControl')
+        .type(email)
+        .get('#passwordControl')
+        .type(password)
+        .get('#repeatPasswordControl')
+        .type(repeatPassword)
+        .get('.mat-form-field-flex mat-select[name="securityQuestion"]')
+        .click()
+        .get('#mat-select-2-panel')
+        .scrollTo('bottom')
+        .then(() => {
+          cy.get('#mat-option-13').click();
+        })
+        .get('#securityAnswerControl')
+        .type(answer)
+        .get('#registerButton')
+        .click();
     }
 }
 export default new LoginPage();

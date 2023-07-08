@@ -2,7 +2,7 @@ import faker from 'faker';
 
 export function login(user) {
     cy.log('Open website page');
-    cy.visit('https://juice-shop-sanitarskyi.herokuapp.com/#/');
+    cy.visit('/');
 
     cy.log('Check and close Welcome banner');
     cy.get('app-welcome-banner').then(($welcomeBanner) => {
@@ -26,17 +26,19 @@ export function login(user) {
     cy.get('#loginButton').click();
 };
 
-export function addNewAddress(user) {
+export function addNewAddress() {
     cy.log('Add new address')
     cy.get('button[aria-label="Add a new address"]').click();
 
-    user.country = faker.address.country(),
-        user.name = faker.name.findName(),
-        user.mobileNumber = faker.phone.phoneNumber('########'),
-        user.ZIPcode = faker.address.zipCode('#####'),
-        user.address = faker.address.streetAddress(),
-        user.city = faker.address.city(),
-        user.state = faker.address.state()
+    const user = {
+        country: faker.address.country(),
+        name: faker.name.findName(),
+        mobileNumber: faker.phone.phoneNumber('########'),
+        ZIPcode: faker.address.zipCode('#####'),
+        address: faker.address.streetAddress(),
+        city: faker.address.city(),
+        state: faker.address.state()
+    };
 
     cy.get('input[placeholder="Please provide a country."]').type(user.country);
     cy.get('input[placeholder="Please provide a name."]').type(user.name);
@@ -55,14 +57,36 @@ export function addNewCard() {
         cardNumber = faker.finance.creditCardNumber('63[7-9]############L')
 
     cy.get('mat-expansion-panel-header[id="mat-expansion-panel-header-0"]').click();
-    cy.get('input[id="mat-input-3"]').type(cardName);
-    cy.get('input[id="mat-input-4"]').type(cardNumber);
-    cy.get('select[id="mat-input-5"]').select('2');
-    cy.get('select[id="mat-input-6"]').select('2080');
+    cy.get('span.mat-form-field-label-wrapper')
+        .contains('Name')
+        .parent()
+        .parent()
+        .parent()
+        .find('input')
+        .type(cardName);
+
+    cy.get('span.mat-form-field-label-wrapper')
+        .contains('Card Number')
+        .parent()
+        .parent()
+        .parent()
+        .find('input')
+        .type(cardNumber);
+
+    cy.contains('Expiry Month')
+        .closest('div.mat-form-field-infix')
+        .find('select')
+        .select('4')
+
+    cy.contains('Expiry Year')
+        .closest('div.mat-form-field-infix')
+        .find('select')
+        .select('2080');
+
     cy.get('#submitButton').click();
 }
 
-export function selectAddressOrAddNewOne() {
+export function selectAddressOrAddNew() {
     cy.log('Select an address or add a new one');
     cy.wait(2000);
     cy.get('mat-card').then(($matCard) => {
@@ -105,7 +129,7 @@ export function searchItem(keyword) {
     });
 }
 
-export function closePopUps(){
+export function closePopUps() {
     cy.log('Check and close Welcome banner');
     cy.get('app-welcome-banner').then(($welcomeBanner) => {
         if ($welcomeBanner.is(':visible')) {
